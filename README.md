@@ -4,5 +4,4 @@
 
 [ru]
 
-Шейнфинкель и комбинаторная логика1
-http://iph.ras.ru/uplfile/logic/shalack/schonfinkel.pdf
+[Шейнфинкель и комбинаторная логика](http://iph.ras.ru/uplfile/logic/shalack/schonfinkel.pdf)
