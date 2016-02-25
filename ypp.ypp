@@ -2,21 +2,22 @@
 #include "hpp.hpp"
 %}
 %defines %union { Sym*o; }
-%token <o> C V I K S
-%type <o> ex cv
+%token <o> SYM				/* symbol */
+%token <o> I K S T Z		/* combinators: I K S T Z */
+%token <o> L R				/* brackets: ( ) */
+%token <o> EOL				/* end of line marker */
+%type <o> ex
 %%
-REPL: | REPL ex { cout<<"----------------------\n"<<$2->dump()<<"\n\n"; } ;
-cv	: C | V ;
-ex	:
-	  I cv		{ $$=$2;
-				cout << $1->dump() << $2->dump() 
-					<< "=I=" << $$->dump() << "\n"; }
-	| K cv cv	{ $$=$2;
-				cout << $1->dump() << $2->dump() << $3->dump()
-					<< "=K=" << $$->dump() << "\n"; }
-	| S cv cv cv	{ $$=new App(new App($2,$4),new App($3,$4));
-				cout << $2->dump() << $3->dump() << $4->dump()
-					<< "=S=" << $$->dump() << "\n"; }
-   ;
+REPL	:
+		| REPL EOL		/* required for @-omitted: end line marker */
+		| REPL ex 		{ cout << $2->eval()->dump()
+							<< "\n========================\n"; } ;
+ex		: SYM
+		| ex ex			{ $$=new App($1,$2); }
+		| L ex R		{ $$=new LR($2); }
+		| I ex			{ $$=$1; $$->push($2); }
+		| K ex ex		{ $$=$1; $$->push($2); $$->push($3); }
+		| S ex ex ex	{ $$=$1; $$->push($2); $$->push($3); $$->push($4); }
+;
 %%
 

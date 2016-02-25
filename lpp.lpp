@@ -4,11 +4,14 @@
 %option noyywrap
 %option yylineno
 %%
-#[^\n]*		{}
-[a-d]		TOC(Const,C)
-[x-z]		TOC(Var,V)
-I			TOC(Combinator,I)
-K			TOC(Combinator,K)
-S			TOC(Combinator,S)
-[ \t\r\n]+	{}
+#[^\n]*		{}				/* line comment */
+\(			TOC(Sym,L)		/* brackets */
+\)			TOC(Sym,R)
+[a-d]		TOC(Const,SYM)	/* constant */
+[x-z]		TOC(Var,SYM)	/* variable */
+[I]			TOC(_I,I)		/* combinators */
+[K]			TOC(_K,K)
+[S]			TOC(_S,S)
+[\r\n]+		TOC(Sym,EOL)	/* line break as env of expression */
+[ \t]+		{}				/* drop spaces */
 %%
