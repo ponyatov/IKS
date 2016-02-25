@@ -1,0 +1,22 @@
+%{
+#include "hpp.hpp"
+%}
+%defines %union { Sym*o; }
+%token <o> C V I K S
+%type <o> ex cv
+%%
+REPL: | REPL ex { cout<<"----------------------\n"<<$2->dump()<<"\n\n"; } ;
+cv	: C | V ;
+ex	:
+	  I cv		{ $$=$2;
+				cout << $1->dump() << $2->dump() 
+					<< "=I=" << $$->dump() << "\n"; }
+	| K cv cv	{ $$=$2;
+				cout << $1->dump() << $2->dump() << $3->dump()
+					<< "=K=" << $$->dump() << "\n"; }
+	| S cv cv cv	{ $$=new App(new App($2,$4),new App($3,$4));
+				cout << $2->dump() << $3->dump() << $4->dump()
+					<< "=S=" << $$->dump() << "\n"; }
+   ;
+%%
+

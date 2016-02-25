@@ -1,0 +1,14 @@
+%{
+#include "hpp.hpp"
+%}
+%option noyywrap
+%option yylineno
+%%
+#[^\n]*		{}
+[a-d]		TOC(Const,C)
+[x-z]		TOC(Var,V)
+I			TOC(Combinator,I)
+K			TOC(Combinator,K)
+S			TOC(Combinator,S)
+[ \t\r\n]+	{}
+%%
